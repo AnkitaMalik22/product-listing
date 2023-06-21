@@ -1,0 +1,111 @@
+.container {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: first baseline;
+
+  background-color: var(--primary-color);
+  font-family: "DM Sans";
+}
+.login-container,
+.register-container,
+.add-product-container {
+  margin-top: 5rem;
+  width: 36%;
+  align-items: flex-start !important;
+}
+.contatiner-h1 {
+  color: var(--white-color);
+  margin-bottom: 0;
+}
+.conatiner-p {
+  color: var(--white-color);
+}
+.container-form {
+  width: 88%;
+  background-color: var(--white-color);
+  color: var(--gray-color);
+  padding: 3rem 2rem;
+  border-radius: 0.8rem;
+  box-shadow: 0px 4px 36px rgba(0, 0, 0, 0.25);
+}
+.container-input-box {
+  width: 100%;
+  margin-bottom: 1rem;
+}
+.container-icon {
+  margin-right: 1rem;
+}
+.container-input {
+  width: 80%;
+  border: none;
+  border-bottom: 1px solid #aaaaaa;
+}
+.container-input:focus {
+  outline: none;
+}
+
+.container-btn {
+  position: relative;
+  left: 10rem;
+  top: 1rem;
+}
+.container-bottom-text {
+  font-size: 0.8rem;
+  position: relative;
+  right: 6rem;
+}
+
+/* ===== MODAL ============ */
+.modal-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50%;
+  height: 60%;
+  background-color: transparent;
+  position: absolute;
+  top: 10%;
+  left: 25%;
+  z-index: 10;
+  font-family: 'DM Sans';
+}
+.inner-modal-container {
+  width: 100%;
+  height: 100%;
+  flex-direction: row-reverse !important;
+}
+.modal-container-form {
+  width: 65%;
+  height: 81.5%;
+  border-radius: 0 !important;
+}
+.modal-container-bottom-text {
+  width: 80%;
+  left: -1.2rem !important;
+}
+.modal-container-btn {
+  position: relative;
+  left: -6.8rem;
+}
+.modal-form-title {
+  width: 35%;
+  height: 90%;
+  background-color: var(--primary-color);
+  color: var(--white-color);
+  padding: 2rem;
+}
+.modal-container-p {
+  font-size: 1.3rem;
+  width: 65%;
+}
+.modal-i-box{
+  margin-bottom: 1.6rem !important;
+ 
+}
+.modal-i-box>input{
+  font-family: 'DM Sans';
+  font-weight: 500;
+  font-size: 1rem;
+}
