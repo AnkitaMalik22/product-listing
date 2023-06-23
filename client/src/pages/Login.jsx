@@ -82,14 +82,18 @@ const Login = () => {
             showModal ? "inner-modal-container" : ""
           } `}
         >
-          {mediaQuery.isDesktop && <>
+         
           {showModal ? (
+            <>
+             {mediaQuery.isDesktop && <>
             <div className="modal-form-title">
               <h1 className="contatiner-h1">Feedback</h1>
               <p className="modal-container-p">
                 Add your product and rate other items.............
               </p>
             </div>
+            </>}
+            </>
           ) : (
             <>
               <h1 className="contatiner-h1">Feedback</h1>
@@ -98,7 +102,10 @@ const Login = () => {
               </p>
             </>
           )}
-          </>}
+
+          
+
+         
 
           <div
             className={`container-form flex flex-col ${

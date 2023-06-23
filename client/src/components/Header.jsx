@@ -4,10 +4,11 @@ import "../styles/common.css";
 import heroImg from "../imgs/image_1.png";
 import { useNavigate } from "react-router-dom";
 import { useAppContext } from "../hooks/AppContext";
+import profilePhoto from '../imgs/profile.png'
 
 const Header = () => {
   const navigate = useNavigate();
-  const { isAuth,userName ,setAuth} = useAppContext();
+  const { isAuth,userName ,setAuth,mediaQuery} = useAppContext();
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -44,7 +45,20 @@ const Header = () => {
               <p className="logout nav-btn"
             onClick={handleLogout}
               >Log out</p>
-              <div className="user ">Hello! {userName} </div>
+
+         <div className="user flex ">
+         {mediaQuery.isDesktop ?
+            <>  Hello! {userName}  <div className="profile-image flex" style={{marginLeft:"0.5rem"}}>
+            <img src={profilePhoto} width={mediaQuery.isMobile ? 30 : 40} />
+           </div> </>
+          :
+            <div className="profile-image flex">
+               <img src={profilePhoto} width={mediaQuery.isMobile ? 30 : 40} />
+              </div>
+
+}
+                 </div>
+                 
             </>
           )}
         </div>

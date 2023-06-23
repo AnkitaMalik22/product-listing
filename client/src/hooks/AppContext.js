@@ -69,13 +69,20 @@ const [newProduct , setNewProduct] = useState(false);
 
   
   useEffect (() => {
- if (filter){
+ if (filter && mediaQuery.isDesktop){
   scrollToTop(450);
- }else
-  {
-    scrollToTop(0);
+ }else if (filter && mediaQuery.isMobile){
+  scrollToTop(0);
   }
+   
   }, [filter]);
+
+
+  useEffect(() => {
+  scrollToTop()
+  }, [showModal]);
+
+
 
   return (
     <AppContext.Provider

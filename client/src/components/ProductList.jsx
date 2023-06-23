@@ -18,6 +18,7 @@ const ProductList = () => {
     setNewProduct,
     newComment,
     setNewComment,
+    mediaQuery
   } = useAppContext();
 
   const [products, setProducts] = useState([]);
@@ -111,7 +112,7 @@ const ProductList = () => {
             </span>
             {sortBy === "upvotes" ? "Upvotes" : "Comments"}
             <div
-              style={{ marginLeft: "0.5rem", cursor: "pointer" }}
+              style={{ marginLeft:mediaQuery.isMobile ? "0.1rem" :"0.5rem" , cursor: "pointer" }}
               onClick={handleUpvotes}
             >
               <svg

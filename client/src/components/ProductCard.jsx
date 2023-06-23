@@ -51,8 +51,9 @@ const ProductCard = ({product}) => {
   return (
     <>
       <div className="product" key={product._id}>
-        <div className="product-image">
-          <img src={logoUrl}alt="product" />
+        <div className="product-image flex">
+          <img src={logoUrl} width={mediaQuery.isDesktop ? 50 : 30 } height={mediaQuery.isDesktop ? 50 : 30} style={{borderRadius:"50%"}}/>
+
         </div>
         <div className="product-des flex flex-col">
           <div className="product-des-inner">
