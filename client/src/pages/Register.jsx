@@ -1,34 +1,134 @@
-import React, { useState } from "react";
+import React, { useState ,useEffect} from "react";
 import "../styles/form.css";
 import "../styles/common.css";
+import { useAppContext } from "../hooks/AppContext";
+import { registerUser } from "../utils/userApis";
+import { useNavigate,Link } from "react-router-dom";
+import { AlertError, AlertSuccess } from "../components/Alert";
 
 const Register = () => {
-  const [userData,setUserData]=useState({
-    name:'',
-    email:'',
-    mobile:'',
-    password:''
-  })
+  const navigate = useNavigate();
+  const { showModal ,setUserName ,setIsSignup,setAuth,setShowModal,mediaQuery } = useAppContext();
+  const [nameError, setNameError] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const [mobileError, setMobileError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+  
 
-  const handleSubmit =()=>{
+  const [userData, setUserData] = useState({
+    name: "",
+    email: "",
+    mobile: "",
+    password: "",
+  });
+  const { name, email, mobile, password } = userData;
+  useEffect(() => {
+    const clearMessage = () => {
 
+      setErrorMessage('');
+      setSuccessMessage('');
+     
+    };
+    
+  if ( successMessage) {
+    setTimeout(clearMessage, 1000);
+    navigate("/");
+  }else{
+    setTimeout(clearMessage, 1000);
   }
+}, [errorMessage,successMessage]);
 
 
-const handleChangeData=(e)=>{
-  const{name , value} =e.taget;
-  setUserData({ ...userData, [name]: value });
-}
+  const handleErrors = () => {
+    setNameError("");
+    setEmailError("");
+    setMobileError("");
+    setPasswordError("");
 
+    if (!name) {
+      setNameError("Name is required.");
+    }
+    if (!email) {
+      setEmailError("Email is required.");
+    }
+    if (!mobile) {
+      setMobileError("Mobile is required.");
+    }
+    if (!password) {
+      setPasswordError("Password is required.");
+    }
+  };
+
+  const handleSubmit = async () => {
+    handleErrors();
+  
+    if (name && email && password && mobile) {
+      try {
+        const response = await registerUser(userData);
+        console.log(response);
+  
+        if (response.status === "SUCCESS") {
+          setAuth(true);
+          setUserName(response.userName);
+          setSuccessMessage(response.message);
+          setErrorMessage("");
+          setShowModal(false);
+        } else {
+          setSuccessMessage("");
+          setErrorMessage(response.message);
+        }
+      } catch (error) {
+        console.error("Error registering user:", error);
+        setErrorMessage("An error occurred while registering the user.");
+      }
+    }
+  };
+  
+  
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setUserData({ ...userData, [name]: value });
+  };
 
   return (
-    <div className="container">
-      <div className="register-container flex flex-col">
-        <h1 className="contatiner-h1">Feedback</h1>
-        <p className="conatiner-p">
-          Add your products and give us your valuable feedback
-        </p>
-        <form action="post" className="container-form flex flex-col" onSubmit={handleSubmit}>
+   <>
+    {successMessage && <AlertSuccess successMessage={successMessage} />}
+   {errorMessage &&  <AlertError errorMessage={errorMessage}  />}
+
+
+    <div className={` ${showModal ? "modal-container" : "container"}`}>
+     
+      <div
+        className={`register-container flex flex-col ${
+          showModal ? "inner-modal-container" : ""
+        } `}
+      >
+       
+       {mediaQuery.isDesktop && <>
+          {showModal ? (
+            <div className="modal-form-title">
+              <h1 className="contatiner-h1">Feedback</h1>
+              <p className="modal-container-p">
+                Add your product and rate other items.............
+              </p>
+            </div>
+          ) : (
+            <>
+              <h1 className="contatiner-h1">Feedback</h1>
+              <p className="conatiner-p">
+                Add your products and give us your valuable feedback
+              </p>
+            </>
+          )}
+          </>}
+        <div
+          className={`container-form flex flex-col ${
+            showModal ? "modal-container-form" : ""
+          } `}
+        >
           <div className="container-input-box flex flex-row">
             <div className="container-icon">
               <svg
@@ -44,12 +144,19 @@ const handleChangeData=(e)=>{
                 />
               </svg>
             </div>
-            <input
-              type="text"
-              name="name"
-              placeholder="Name"
-              className="container-input"
-            />
+            <div className={` i-error-box flex flex-col`}>
+              <input
+                type="text"
+                name="name"
+                value={name}
+                onChange={handleChange}
+                placeholder="Name"
+                className={`register-input ${
+                  nameError === "" ? "" : "input-error"
+                }`}
+              />
+              <span className="i-error">{nameError}</span>
+            </div>
           </div>
           <div className="container-input-box flex flex-row">
             <div className="container-icon">
@@ -66,12 +173,19 @@ const handleChangeData=(e)=>{
                 />
               </svg>
             </div>
-            <input
-              type="email"
-              name="email"
-              placeholder="Email"
-              className="container-input"
-            />
+            <div className={` i-error-box flex flex-col`}>
+              <input
+                type="email"
+                name="email"
+                value={email}
+                onChange={handleChange}
+                placeholder="Email"
+                className={`register-input ${
+                  emailError === "" ? "" : "input-error"
+                }`}
+              />
+              <span className="i-error">{emailError}</span>
+            </div>
           </div>
           <div className="container-input-box flex flex-row">
             <div className="container-icon">
@@ -88,12 +202,19 @@ const handleChangeData=(e)=>{
                 />
               </svg>
             </div>
-            <input
-              type="text"
-              name="mobile"
-              placeholder="Mobile"
-              className="container-input"
-            />
+            <div className=" i-error-box flex flex-col">
+              <input
+                type="text"
+                name="mobile"
+                value={mobile}
+                onChange={handleChange}
+                placeholder="Mobile"
+                className={`register-input ${
+                  mobileError === "" ? "" : "input-error"
+                }`}
+              />
+              <span className="i-error">{mobileError}</span>
+            </div>
           </div>
           <div className="container-input-box flex flex-row">
             <div className="container-icon">
@@ -110,24 +231,37 @@ const handleChangeData=(e)=>{
                 />
               </svg>
             </div>
-            <input
-              type="text"
-              name="email"
-              placeholder="Password"
-              className="container-input"
-            />
+            <div className=" i-error-box flex flex-col">
+              <input
+                type="password"
+                name="password"
+                value={password}
+                onChange={handleChange}
+                placeholder="Password"
+                className={`register-input ${
+                  passwordError === "" ? "" : "input-error"
+                }`}
+              />
+              <span className="i-error">{passwordError}</span>
+            </div>
           </div>
           <p className="container-bottom-text">
-            Don’t have an account?{" "}
-            <a style={{ color: "var(--primary-color)" }}>Sign up</a>
+            Already have an account?
+            {showModal ? (  <a className="bottom-link" onClick={()=>setIsSignup(false)}>Login</a> ) : (    <Link to="/login" className="bottom-link">Sign up</Link> )}
+
+            <a className="bottom-link"></a>
           </p>
 
-          <button type="submit" className=" btn btn-primary container-btn">
+          <button
+            className=" btn btn-primary container-btn"
+            onClick={handleSubmit}
+          >
             Signup
           </button>
-        </form>
+        </div>
       </div>
     </div>
+   </>
   );
 };
 

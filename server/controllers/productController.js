@@ -4,23 +4,40 @@ const Product = require("../models/Product.js");
 // ----------------------------------------- add a product  ------------------------------------------------
 
 const addProduct = async (req, res, next) => {
-  const { name, category, logoUrl, link, description } = req.body;
-  if ((!name, !category, !logoUrl, !link, !description)) {
-    return res.status(400).json({ message: "Missing required fields" });
+  const { name, categories, logoUrl, link, description } = req.body;
+  if ((!name, !categories, !logoUrl, !link, !description)) {
+    return res.status(400).send({ success: false,message: "Missing required fields" });
   }
+  const lowercaseCategories =  categories.map((category) => category.toLowerCase());
   try {
     const product = await Product.create({
       name,
-      category,
+      categories : lowercaseCategories,
       logoUrl,
       link,
       description,
     });
-    res.status(201).json({ success: true, product: product });
+    res.status(201).send({ success: true, product: product ,message:"Product added successfully" });
   } catch (error) {
+    console.log(error);
     next(new Error("Something went wrong! Please try again."));
   }
 };
+// ----------------------------------------- get product details  ------------------------------------------------
+
+const getProductDetails = async (req, res, next) => {
+  const productId = req.params.id;
+  try {
+    const product = await Product.findById(productId);
+    if (!product) {
+      return res.status(404).json({ message: 'Product not found' });
+    }
+    res.status(200).json(product);
+  } catch (error) {
+    next(new Error('Something went wrong! Please try again.'));
+  }
+};
+
 
 //----------------------------------------- show all added products -----------------------------------------
 
@@ -33,6 +50,7 @@ const getAllProducts = async (req, res, next) => {
 
     res.json({ success: true, products: products });
   } catch (error) {
+    console.log(error);
     next(new Error('Something went wrong! Please try again.'));
   }
 };
@@ -44,15 +62,18 @@ const getAllProducts = async (req, res, next) => {
 const editProduct = async (req, res, next) => {
 
   const  productId  = req.params.id;
-  const { name, category, logoUrl, link, description } = req.body;
+  const { name, categories, logoUrl, link, description } = req.body;
+  const lowercaseCategories =  categories.map((category) => category.toLowerCase());
+
 
   try {
     const product = await Product.findByIdAndUpdate(productId, {
       name,
-      category,
+      categories : lowercaseCategories,
       logoUrl,
       link,
       description,
+    
     });
 
     if (!product) {
@@ -83,8 +104,9 @@ const upvoteProduct = async (req, res, next) => {
 
     await product.save();
 
-    res.json({ success: true, data: product });
+    res.json({ success: true, data: product ,upvotes: product.upvotes });
   } catch (error) {
+
     next(new Error("Something went wrong! Please try again."));
   }
 };
@@ -93,19 +115,27 @@ const upvoteProduct = async (req, res, next) => {
 
 const filterProducts = async (req, res, next) => {
   const { category } = req.query;
+
   try {
-    const products = await Product.find({ category });
-    res.json({ success: true, data: products });
+    let products;
+    if (category.toLowerCase() === "all") {
+      products = await Product.find();
+    } else {
+      products = await Product.find({ categories: category.toLowerCase() });
+    }
+    res.json({ success: true, products: products });
   } catch (error) {
     next(new Error("Something went wrong! Please try again."));
   }
 };
 
+
 // ----------------------------------------- add comment   ------------------------------------------------
 
 const addComment = async (req, res, next) => {
-  const  productId  = req.params.id;
-  const { user, comment } = req.body;
+  const productId = req.params.id;
+  const { comment } = req.body;
+  console.log(comment)
 
   try {
     const product = await Product.findById(productId);
@@ -116,15 +146,32 @@ const addComment = async (req, res, next) => {
         .json({ success: false, message: "Product not found" });
     }
 
-    product.comments.push({ user, comment });
+    product.comments.push(comment);
 
     await product.save();
 
     res.status(201).json({ success: true, data: product });
   } catch (error) {
+    console.error(error);
     next(new Error("Something went wrong! Please try again."));
   }
 };
+
+
+
+// get all categories
+
+const getAllCategories = async (req, res, next) => {
+  try {
+    const categories = await Product.distinct('categories');
+    res.status(200).json(categories);
+  } catch (error) {
+    next(new Error("Something went wrong! Please try again."));
+  }
+};
+
+
+
 
 // ---------export--------------
 
@@ -135,4 +182,8 @@ module.exports = {
   upvoteProduct,
   filterProducts,
   addComment,
+  getProductDetails,
+  getAllCategories,
+
+
 };

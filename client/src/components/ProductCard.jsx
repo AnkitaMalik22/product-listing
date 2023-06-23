@@ -1,34 +1,78 @@
-import React from "react";
+import React,{useState,useEffect} from "react";
 import "../styles/productCard.css";
 import CommentSection from "./CommentSection";
 import { useAppContext } from "../hooks/AppContext";
+import { upvoteProduct } from "../utils/productApis";
 
 
-const ProductCard = () => {
-  const {showComments, setShowComments,upvote,setUpvote } = useAppContext();
-  const handleShowComments =()=>{
-    setShowComments(!showComments)
-  }
-const handleUpvote =()=>{
-setUpvote((prevVotes)=>prevVotes+1)
-// need to implement for specific product
-}
+const ProductCard = ({product}) => {
+  const {
+    showComments,
+    setShowComments,
+    isAuth,
+    setEditing,
+    setShowModal,
+    setEditId,
+    mediaQuery,
+  } = useAppContext();
+
+  
+  const{
+    name,
+    categories,
+    logoUrl,
+    link,
+    description,
+    comments,
+    upvotes,
+
+  } = product;
+ 
+  
+  const [upvote,setUpvote] = useState(upvotes);
+  useEffect(() => {
+    setUpvote(upvotes);
+   }, [upvotes])
+
+  const handleShowComments = () => {
+    setShowComments(!showComments);
+  };
+  const handleEditProduct = (productId) => {
+    setEditId(productId);
+    setEditing(true);
+    setShowModal(true);
+  };
+
+  const handleUpvote = async() => {
+  const res = await upvoteProduct(product._id);
+  setUpvote(res.upvotes);
+  };
 
   return (
     <>
-      <div className="product">
-        <div className="product-image"></div>
+      <div className="product" key={product._id}>
+        <div className="product-image">
+          <img src={logoUrl}alt="product" />
+        </div>
         <div className="product-des flex flex-col">
           <div className="product-des-inner">
-            <h4 className="product-name">Cred Club</h4>
+            <h4 className="product-name">{name}</h4>
             <p className="product-p">
-              It is good for credit card payments,it is fast,secure
+           {description}
             </p>
           </div>
           <div className="categories-container">
             <div className="categories flex">
-              <div className="filter p-filter">Fintech</div>
-              <div className="make-comment flex" onClick={()=>handleShowComments()}>
+             
+             {
+              categories && categories.map((category) => (  
+                <div className="filter p-filter">{category}</div>
+              ))
+             }
+              <div
+                className="make-comment flex"
+                onClick={() => handleShowComments()}
+              >
                 <svg
                   style={{ marginLeft: "1rem" }}
                   width="21"
@@ -42,13 +86,23 @@ setUpvote((prevVotes)=>prevVotes+1)
                     fill="#ABABAB"
                   />
                 </svg>
-                <p style={{ marginLeft: "0.2rem" }} >Comment</p>
+                <p style={{margin:0, marginLeft: "0.2rem" }}>Comment</p>
               </div>
+              {mediaQuery.isMobile && isAuth && (
+            <div className="edit">
+              <button className="btn btn-primary" onClick={()=>handleEditProduct(product._id)}>
+                Edit
+              </button>
+            </div>
+          )}
             </div>
           </div>
         </div>
         <div className="product-actions flex flex-col">
-          <div className="upvote-product flex flex-col"  onClick={()=>handleUpvote()}>
+          <div
+            className="upvote-product flex flex-col"
+            onClick={() => handleUpvote()}
+          >
             <svg
               width="13"
               height="8"
@@ -63,12 +117,26 @@ setUpvote((prevVotes)=>prevVotes+1)
             </svg>
             {upvote}
           </div>
-          <div className="comment-product flex" onClick={()=>handleShowComments()}>
-            <p>10</p>
+      
+         
+          {mediaQuery.isDesktop && isAuth && (
+            <div className="edit">
+              <button className="btn btn-primary" onClick={()=>handleEditProduct(product._id)}>
+                Edit
+              </button>
+            </div>
+          )}
+        
+       
+          <div
+            className="comment-product flex"
+            onClick={() => handleShowComments()}
+          >
+            <p>{comments && comments.length}</p>
             <svg
               style={{ marginLeft: "0.2rem" }}
-              width="24"
-              height="23"
+              width={mediaQuery.isMobile ? "20" : "24"}
+              height={mediaQuery.isMobile ? "20" : "23"}
               viewBox="0 0 24 23"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
@@ -82,7 +150,7 @@ setUpvote((prevVotes)=>prevVotes+1)
         </div>
       </div>
 
-      {showComments && <CommentSection />}
+      {showComments && <CommentSection  productId = {product._id}  comments={product.comments} />}
     </>
   );
 };

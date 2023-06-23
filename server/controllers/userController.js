@@ -11,7 +11,9 @@ const register = async (req, res, next) => {
     return res.status(400).json({ message: "Missing required fields" });
   }
   if (await User.findOne({ email })) {
-    return res.status(400).json({ message: "User already exists" });
+    return res
+      .status(400)
+      .send({ status: "FAIL", message: "User already exists" });
   }
   try {
     const user = await User.findOne({ email });
@@ -33,6 +35,7 @@ const register = async (req, res, next) => {
       status: "SUCCESS",
       message: "User registerd successfully",
       token,
+      userName: newUser.name,
     });
   } catch (err) {
     next(new Error("Something went wrong! Please try after some time."));
@@ -44,7 +47,9 @@ const register = async (req, res, next) => {
 const login = async (req, res, next) => {
   const { email, password } = req.body;
   if (!email || !password) {
-    return res.status(400).json({ message: "Missing required fields" });
+    return res
+      .status(400)
+      .send({ status: "FAIL", message: "Missing required fields" });
   }
 
   try {
@@ -55,22 +60,22 @@ const login = async (req, res, next) => {
       if (!isPasswordMatched) {
         return res
           .status(400)
-          .json({ success: false, message: "Invalid credentials" });
+          .send({ status: "FAIL", message: "Invalid credentials" });
       } else {
         const token = jwt.sign({ email }, process.env.JWT_SECRET, {
           expiresIn: "10d",
         });
-        res.json({
+        res.send({
           status: "SUCCESS",
           message: "User logged in successfully",
           token,
+          userName: user.name,
         });
       }
     } else {
       next(new Error("User not found"));
     }
   } catch (error) {
-    
     next(new Error("Something went wrong! Please try after some time."));
   }
 };

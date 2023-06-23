@@ -11,8 +11,8 @@
 .product-image {
   
   margin: 1rem;
-  width: 76px;
-  height: 76px;
+  width: 36px;
+  height: 36px;
   background-color: blue;
   border-radius: 50%;
 }
@@ -40,17 +40,7 @@
 }
 .categories {
 }
-.p-filter {
-  background-color: #c0ceff !important;
-  color: var(--primary-color) !important;
-  margin: 0 !important;
-  margin-right: 0.5rem !important;
-}
-.p-filter:hover {
-    font-weight: 500;
-  background-color: #c0ceff !important;
-  color: var(--primary-color) !important;
-}
+
 .make-comment {
   color: #ababab;
 }
@@ -102,6 +92,7 @@
   max-height: 6rem;
   overflow-y: scroll;
   padding: 1.5rem 1rem;
+  align-items: flex-start !important;
 }
 .product-comment {
   margin-top: 1rem;
@@ -132,4 +123,66 @@
   
   ::-webkit-scrollbar-thumb:hover {
     background-color: #A5A9B6;
+  }
+
+
+  /* responsive */
+
+
+  @media screen and (max-width :768px){
+    
+   
+      /* flex-direction: column; */
+.categories-container{
+font-size: 0rem;
+}  
+
+.product-image {
+      margin: 0;
+      margin-top: 1rem;
+      margin-left: 0.5rem;
+     
+    }
+    .product-des {
+      margin: 0;
+      padding: 0.5rem;
+  
+    }
+    .product-name {
+      font-size: 1.2rem;
+    }
+    .product-p {
+      font-size: 0.8rem;
+    }
+    .product-actions {
+      margin: 0;
+      margin-top: 1rem;
+      margin-right: 0.5rem;
+   
+    }
+    .edit {
+    position: static;
+    height: auto;
+    margin-left: 0.5rem;
+    }
+    .input-comment {
+      border: 2px solid #c7cbd6;
+      padding: 0.6rem 0.8rem;
+      width: 82%;
+      border-radius: 2rem;
+    }
+    .input-comment::placeholder{
+        color: #ABABAB;
+        font-size: 0.8rem;
+    }
+    .commend-send {
+      position: absolute;
+      right: 2rem;
+      cursor: pointer;
+    }
+    .input-comment:focus {
+      outline: none;
+    }
+   
+    
   }

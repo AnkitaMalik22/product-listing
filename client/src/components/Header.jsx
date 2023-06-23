@@ -7,7 +7,15 @@ import { useAppContext } from "../hooks/AppContext";
 
 const Header = () => {
   const navigate = useNavigate();
-  const { isAuth } = useAppContext();
+  const { isAuth,userName ,setAuth} = useAppContext();
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("userName");
+    setAuth(false);
+    navigate("/login");
+  };
+
   return (
     <header className="header flex flex-col">
       <nav className="nav flex">
@@ -32,16 +40,18 @@ const Header = () => {
           )}
           {isAuth && (
             <>
-              {" "}
-              <p className="logout nav-btn">Log out</p>
-              <div className="user ">Hello! </div>
+           
+              <p className="logout nav-btn"
+            onClick={handleLogout}
+              >Log out</p>
+              <div className="user ">Hello! {userName} </div>
             </>
           )}
         </div>
       </nav>
       <div className="hero flex ">
         <div className="hero-img">
-          <img src={heroImg} alt="hero image" width={450} />
+          <img src={heroImg} className="hero-image" width={450} />
         </div>
         <div className="hero-des">
           <h1 className="hero-des-title">

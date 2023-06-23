@@ -38,9 +38,17 @@
   margin-right: 1rem;
 }
 .container-input {
-  width: 80%;
+  width: 99%;
   border: none;
   border-bottom: 1px solid #aaaaaa;
+}
+.register-input {
+  width: 99%;
+  border: none;
+  border-bottom: 1px solid #aaaaaa;
+}
+.register-input:focus {
+  outline: none;
 }
 .container-input:focus {
   outline: none;
@@ -56,6 +64,36 @@
   position: relative;
   right: 6rem;
 }
+.i-error-box {
+  width: 80%;
+  align-items: flex-start !important;
+}
+.input-error {
+  width: 99%;
+  border-bottom: 1px solid #bb0000;
+}
+
+.i-error {
+  color: #bb0000;
+  width: 98%;
+  font-size: 0.8rem;
+  margin-top: 0.3rem;
+}
+.edit {
+  position: relative;
+  top: 0.9rem;
+  right: 5rem;
+  height: 0.2rem;
+}
+.bottom-link {
+  color: var(--primary-color);
+  text-decoration: underline;
+}
+.bottom-link:hover {
+  cursor: pointer;
+  font-weight: 700;
+  transition: all 0.3s ease-in-out;
+}
 
 /* ===== MODAL ============ */
 .modal-container {
@@ -63,13 +101,13 @@
   align-items: center;
   justify-content: center;
   width: 50%;
-  height: 60%;
+  height: 65%;
   background-color: transparent;
   position: absolute;
   top: 10%;
   left: 25%;
   z-index: 10;
-  font-family: 'DM Sans';
+  font-family: "DM Sans";
 }
 .inner-modal-container {
   width: 100%;
@@ -88,6 +126,7 @@
 .modal-container-btn {
   position: relative;
   left: -6.8rem;
+  top: -0.5rem;
 }
 .modal-form-title {
   width: 35%;
@@ -100,12 +139,45 @@
   font-size: 1.3rem;
   width: 65%;
 }
-.modal-i-box{
+.modal-i-box {
   margin-bottom: 1.6rem !important;
- 
 }
-.modal-i-box>input{
-  font-family: 'DM Sans';
+.modal-i-box > input {
+  font-family: "DM Sans";
   font-weight: 500;
   font-size: 1rem;
+}
+
+/*  RESPONSIVE   */
+
+@media screen and (max-width: 768px) {
+  .contatiner-h1 {
+    text-align: start;
+  }
+
+  .login-container,
+  .register-container {
+    width: 90%;
+  }
+  .container-form {
+    height: 80%;
+    padding: 2rem 1rem;
+  }
+  .inner-modal-container {
+    height: auto;
+  }
+  .container-bottom-text {
+    right: 0;
+  }
+
+  .modal-container {
+    width: 80%;
+    height: 53%;
+    top: 10%;
+    left: 10%;
+  }
+  .container-btn {
+    width: 100%;
+    position: static;
+  }
 }

@@ -2,14 +2,14 @@ import React, { useEffect, useRef } from "react";
 import Header from "../components/Header";
 import ProductFilters from "../components/ProductFilters";
 import "../styles/header.css";
-
 import ProductForm from "../components/ProductForm";
 import { useAppContext } from "../hooks/AppContext";
 import ProductList from "../components/ProductList";
 import Login from "./Login";
+import Register from "./Register";
 
 const Home = () => {
-  const { showModal, setShowModal ,isAuth} = useAppContext();
+  const { showModal, setShowModal, isAuth, isSignup } = useAppContext();
   const modalRef = useRef(null);
 
   const handleClickOutside = (event) => {
@@ -32,22 +32,21 @@ const Home = () => {
 
   return (
     <>
-    {showModal && (
-      <>
-        <div ref={modalRef}>
-        {isAuth ? <ProductForm /> : <Login/>}
+      {showModal && (
+        <>
+          <div ref={modalRef}>
+            {isAuth ? <ProductForm /> : isSignup ? <Register /> : <Login />}
+          </div>
+          <div className="modal-back" onClick={handleClickOutside}></div>
+        </>
+      )}
+      <div className="home">
+        <Header />
+        <div className="home-container flex">
+          <ProductFilters />
+          <ProductList />
         </div>
-        <div className="modal-back" onClick={handleClickOutside}></div>
-      </>
-    )}
-    <div className="home">
-     
-      <Header />
-      <div className="home-container flex">
-        <ProductFilters />
-        <ProductList />
       </div>
-    </div>
     </>
   );
 };
