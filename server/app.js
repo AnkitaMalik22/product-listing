@@ -16,11 +16,12 @@ dotenv.config();
 database();
 const app = express();
 
+
 // ========================================================= MIDDLEWARES =========================================================  //
 
 app.use(cors());
 app.use(express.json());
-app.use(express.static('./public'))
+app.use(express.static("../client/build"));
 app.use(bodyParser.urlencoded({extended: true}))
 
 // ========================================================= ROUTES =============================================================  //

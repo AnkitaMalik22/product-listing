@@ -19,7 +19,7 @@ const addProduct = async (req, res, next) => {
     });
     res.status(201).send({ success: true, product: product ,message:"Product added successfully" });
   } catch (error) {
-    console.log(error);
+  
     next(new Error("Something went wrong! Please try again."));
   }
 };
@@ -50,7 +50,7 @@ const getAllProducts = async (req, res, next) => {
 
     res.json({ success: true, products: products });
   } catch (error) {
-    console.log(error);
+
     next(new Error('Something went wrong! Please try again.'));
   }
 };
@@ -135,7 +135,7 @@ const filterProducts = async (req, res, next) => {
 const addComment = async (req, res, next) => {
   const productId = req.params.id;
   const { comment } = req.body;
-  console.log(comment)
+
 
   try {
     const product = await Product.findById(productId);
