@@ -70,10 +70,8 @@ const [newProduct , setNewProduct] = useState(false);
   
   useEffect (() => {
  if (filter && mediaQuery.isDesktop){
-  scrollToTop(450);
- }else if (filter && mediaQuery.isMobile){
-  scrollToTop(0);
-  }
+  scrollToTop(350);
+ }
    
   }, [filter]);
 
