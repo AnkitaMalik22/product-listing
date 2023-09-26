@@ -78,8 +78,6 @@ const editProduct = async (req, res, next) => {
       logoUrl,
       link,
       description,
-      addedBy
-    
     });
 
     if (!product) {
