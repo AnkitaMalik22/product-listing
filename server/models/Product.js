@@ -23,7 +23,11 @@ const productSchema = new mongoose.Schema({
     default: 0,
   },
   comments: { type: [String] },
-});
+  // refernce to user model
+  addedBy: {
+    type: String,
+  },
+}, { timestamps: true });
 
 
 const Product = mongoose.model("Product", productSchema);

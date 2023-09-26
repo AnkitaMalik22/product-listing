@@ -6,6 +6,7 @@ import { upvoteProduct } from "../utils/productApis";
 
 
 const ProductCard = ({product}) => {
+  const [canEdit,setCanEdit] = useState(false);
   const {
     showComments,
     setShowComments,
@@ -14,6 +15,8 @@ const ProductCard = ({product}) => {
     setShowModal,
     setEditId,
     mediaQuery,
+    newProduct
+
   } = useAppContext();
 
   
@@ -34,6 +37,13 @@ const ProductCard = ({product}) => {
     setUpvote(upvotes);
    }, [upvotes])
 
+
+   useEffect(() => {
+    const isProductAddedByCurrentUser = localStorage.getItem("userId") === product.addedBy;
+    setCanEdit(isProductAddedByCurrentUser);
+  }, [newProduct]);
+  
+
   const handleShowComments = () => {
     setShowComments(!showComments);
   };
@@ -47,6 +57,8 @@ const ProductCard = ({product}) => {
   const res = await upvoteProduct(product._id);
   setUpvote(res.upvotes);
   };
+
+
 
   return (
     <>
@@ -89,7 +101,7 @@ const ProductCard = ({product}) => {
                 </svg>
                 <p style={{margin:0, marginLeft: "0.2rem" }}>Comment</p>
               </div>
-              {mediaQuery.isMobile && isAuth && (
+              { canEdit && mediaQuery.isMobile && isAuth && (
             <div className="edit">
               <button className="btn btn-primary" onClick={()=>handleEditProduct(product._id)}>
                 Edit
@@ -120,8 +132,10 @@ const ProductCard = ({product}) => {
           </div>
       
          
-          {mediaQuery.isDesktop && isAuth && (
+          { canEdit && mediaQuery.isDesktop && isAuth && (
+    
             <div className="edit">
+              {console.log(canEdit)}
               <button className="btn btn-primary" onClick={()=>handleEditProduct(product._id)}>
                 Edit
               </button>

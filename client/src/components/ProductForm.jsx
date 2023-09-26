@@ -32,6 +32,7 @@ const ProductForm = () => {
     logoUrl: "",
     link: "",
     description: "",
+    addedBy: localStorage.getItem("userId"),
   });
 
   const { name, logoUrl, link, description, categories } = productData;
@@ -95,7 +96,9 @@ const ProductForm = () => {
         categories: categoriesArray,
       }));
     } else {
-      setProductData((prevData) => ({ ...prevData, [name]: value }));
+      setProductData((prevData) => ({ ...prevData,  [name]: value,
+        addedBy: localStorage.getItem("userId"), 
+      }));
     }
   };
 
@@ -129,6 +132,7 @@ const ProductForm = () => {
       alert("Please Login to add product");
       return;
     }
+    console.log(productData)
 
     event.preventDefault();
     handleErrors();

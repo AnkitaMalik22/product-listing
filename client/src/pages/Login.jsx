@@ -58,7 +58,7 @@ const Login = () => {
     handleErrors();
     if (email && password) {
       const response = await loginUser(userData);
-      console.log(response);
+      console.log(response.status);
       if (response.status === "SUCCESS") {
         setAuth(true)
         setUserName(response.userName);

@@ -157,11 +157,16 @@
 
   .login-container,
   .register-container {
-    width: 90%;
+    width: 100%;
+  }
+  .modal-container-form {
+    border-radius: 0;
   }
   .container-form {
     height: 80%;
+    width: 90%;
     padding: 2rem 1rem;
+    border-radius: 0.6rem !important;
   }
   .inner-modal-container {
     height: auto;

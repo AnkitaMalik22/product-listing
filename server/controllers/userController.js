@@ -36,6 +36,7 @@ const register = async (req, res, next) => {
       message: "User registerd successfully",
       token,
       userName: newUser.name,
+      userId: newUser._id,
     });
   } catch (err) {
     next(new Error("Something went wrong! Please try after some time."));
@@ -45,38 +46,58 @@ const register = async (req, res, next) => {
 // LOGIN
 
 const login = async (req, res, next) => {
-  const { email, password } = req.body;
-  if (!email || !password) {
-    return res
-      .status(400)
-      .send({ status: "FAIL", message: "Missing required fields" });
-  }
-
   try {
+    const { email, password } = req.body;
+
+    if (!email || !password) {
+      return res.status(400).json({
+        status: "FAIL",
+        message: "Missing required fields",
+      });
+    }
+
     const user = await User.findOne({ email });
 
-    if (user) {
-      const isPasswordMatched = await bcrypt.compare(password, user.password);
-      if (!isPasswordMatched) {
-        return res
-          .status(400)
-          .send({ status: "FAIL", message: "Invalid credentials" });
-      } else {
-        const token = jwt.sign({ email }, process.env.JWT_SECRET, {
-          expiresIn: "10d",
-        });
-        res.send({
-          status: "SUCCESS",
-          message: "User logged in successfully",
-          token,
-          userName: user.name,
-        });
-      }
-    } else {
-      next(new Error("User not found"));
+    if (!user) {
+      throw new Error("User not found");
     }
+
+    const isPasswordMatched = await bcrypt.compare(password, user.password);
+
+    if (!isPasswordMatched) {
+      throw new Error("Invalid credentials");
+    }
+
+    const token = jwt.sign({ email }, process.env.JWT_SECRET, {
+      expiresIn: "10d",
+    });
+
+    res.status(200).json({
+      status: "SUCCESS",
+      message: "User logged in successfully",
+      token,
+      userName: user.name,
+      userId: user._id,
+    });
   } catch (error) {
-    next(new Error("Something went wrong! Please try after some time."));
+    console.error(error.message);
+
+    if (error.message === "User not found") {
+      res.status(404).json({
+        status: "FAIL",
+        message: "User not found",
+      });
+    } else if (error.message === "Invalid credentials") {
+      res.status(401).json({
+        status: "FAIL",
+        message: "Invalid credentials",
+      });
+    } else {
+      res.status(500).json({
+        status: "ERROR",
+        message: "Something went wrong! Please try again later.",
+      });
+    }
   }
 };
 

@@ -1,13 +1,16 @@
+const mongoose = require("mongoose");
 const Product = require("../models/Product.js");
 
 
 // ----------------------------------------- add a product  ------------------------------------------------
 
 const addProduct = async (req, res, next) => {
-  const { name, categories, logoUrl, link, description } = req.body;
-  if ((!name, !categories, !logoUrl, !link, !description)) {
+  const { name, categories, logoUrl, link, description ,addedBy} = req.body;
+  if ((!name, !categories, !logoUrl, !link, !description )) {
     return res.status(400).send({ success: false,message: "Missing required fields" });
   }
+  
+
   const lowercaseCategories =  categories.map((category) => category.toLowerCase());
   try {
     const product = await Product.create({
@@ -16,10 +19,12 @@ const addProduct = async (req, res, next) => {
       logoUrl,
       link,
       description,
+      addedBy 
     });
+
     res.status(201).send({ success: true, product: product ,message:"Product added successfully" });
   } catch (error) {
-  
+  console.log(error)
     next(new Error("Something went wrong! Please try again."));
   }
 };
@@ -46,7 +51,7 @@ const getProductDetails = async (req, res, next) => {
 const getAllProducts = async (req, res, next) => {
   try {
 
-    const products = await Product.find();
+    const products = await Product.find().populate('addedBy').sort({ createdAt: -1 });
 
     res.json({ success: true, products: products });
   } catch (error) {
@@ -73,6 +78,7 @@ const editProduct = async (req, res, next) => {
       logoUrl,
       link,
       description,
+      addedBy
     
     });
 

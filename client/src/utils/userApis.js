@@ -11,6 +11,7 @@ const registerUser = async (userData) => {
     const response = await axios.post(`${API_URL}/register`, userData);
     localStorage.setItem('token' ,JSON.stringify(response.data.token));
     localStorage.setItem('userName' ,JSON.stringify(response.data.userName));
+    localStorage.setItem('userId' ,JSON.stringify(response.data.userId));
     return response.data;
 
   } catch (error) {
@@ -26,6 +27,7 @@ const loginUser = async (userData) => {
     const response = await axios.post(`${API_URL}/login`, userData);
     localStorage.setItem('token' ,JSON.stringify(response.data.token))
     localStorage.setItem('userName' ,JSON.stringify(response.data.userName));
+    localStorage.setItem('userId' ,JSON.stringify(response.data.userId));
     return response.data;
   } catch (error) {
     return error.response.data;
